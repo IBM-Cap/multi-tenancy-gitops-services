@@ -19,7 +19,7 @@ global:
   # If digest is specified, it takes precedence over tag
     digest: sha256:3e60c61f4e38fa5be50c28db8887fcd86f6f243d6055b9730ab0b2a0c01a5ef3
     pullPolicy: IfNotPresent
-    pullSecret: ""
+    pullSecret: ibm-entitlement-key
   networkPolicies:
     ingress:
       enabled: false
@@ -160,7 +160,7 @@ dataSetup:
      # If digest is specified, it takes precedence over tag
     digest: sha256:6be066b14d4d6cdc752b691f3907c8673ea36e82ce8ebe721e41882dce331e93
     pullPolicy: IfNotPresent
-    pullSecret: ""
+    pullSecret: ibm-entitlement-key
 
 
 env:
