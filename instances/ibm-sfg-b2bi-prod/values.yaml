@@ -15,7 +15,7 @@ global:
   image:
     repository: "image-registry.openshift-image-registry.svc:5000/b2bi-prod/b2bi"
   # Provide the tag value in double quotes
-    tag: "b2bi-june18"
+    tag: "b2bi-june24"
   # If digest is specified, it takes precedence over tag
     digest: sha256:3e60c61f4e38fa5be50c28db8887fcd86f6f243d6055b9730ab0b2a0c01a5ef3
     pullPolicy: IfNotPresent
@@ -81,7 +81,7 @@ serviceAccount:
   name: default
 
 resourcesInit:
-  enabled: true
+  enabled: false
   image:
     repository: "cp.icr.io/cp/ibm-b2bi"
     name: "b2bi-resources"
@@ -95,7 +95,7 @@ persistence:
   useDynamicProvisioning: true
 
 appResourcesPVC:
-  enabled: false
+  enabled: true
   storageClassName: ""
   selector:
     label: "intent"
@@ -156,7 +156,7 @@ dataSetup:
   image:
     repository: "image-registry.openshift-image-registry.svc:5000/b2bi-prod/b2bi-dbsetup"
     # Provide the tag value in double quotes
-    tag: "b2bi-dbsetup-june18"
+    tag: "b2bi-dbsetup-june24"
      # If digest is specified, it takes precedence over tag
     digest: sha256:6be066b14d4d6cdc752b691f3907c8673ea36e82ce8ebe721e41882dce331e93
     pullPolicy: IfNotPresent
@@ -250,7 +250,7 @@ integrations:
       claims:
         name: itxa-nfs-claim
     sso:
-      host: "itxa.itzroks-664003h6xc-z2t6sc-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud"
+      host: "itxa.itzroks-664003h6xc-ywje6s-4b4a324f027aea19c5cbc0c3275c4656-0000.us-east.containers.appdomain.cloud"
       port: 443
       ssl:
         enabled: true
@@ -275,7 +275,7 @@ setupCfg:
 
   # Provide the DB attributes
   dbVendor: db2
-  dbHost: 172.21.248.132
+  dbHost: 172.21.22.29
   dbPort: 50000
   dbData: B2BIDB
   dbDrivers: db2jcc4.jar
@@ -313,20 +313,20 @@ setupCfg:
   #JMS properties are optional if jmsVendor is empty
   #To use IBMMQ for communication between ASI & AC, change property to jmsVendor: IBMMQ
   # and provide other connection details
-  jmsVendor:
+  jmsVendor: IBMMQ
   # Provide the name of connection factory class. 
-  jmsConnectionFactory:
+  jmsConnectionFactory: com.ibm.mq.jms.MQQueueConnectionFactory
   jmsConnectionFactoryInstantiator:
-  jmsQueueName:
-  jmsHost:
-  jmsPort:
-  jmsConnectionNameList:
+  jmsQueueName: DEV.QUEUE.1
+  jmsHost: 172.21.81.39
+  jmsPort: 1414
+  jmsConnectionNameList: 172.21.81.39(1414)
   # Applicable for IBMMQ
-  jmsChannel:
-  jmsEnableSsl:
+  jmsChannel: DEV.APP.SVRCONN
+  jmsEnableSsl: false
   
   # Name of JMS secret if available
-  jmsSecret:
+  jmsSecret: b2b-jms-secret
   
   # Specify JMS keystore file name including it's path relative to the mounted resources volume location, if applicable.
   # When jmsKeystoreSecret is mentioned, provide the name of the key holding the certificate data.
@@ -449,7 +449,8 @@ asi:
     annotations: {}  
   
   backendService:
-    type: LoadBalancer
+    #type: LoadBalancer
+    type: NodePort
     # Supported values are "ClientIP" & "None". Default is "None".
     sessionAffinity: None
     #override session affinity timeout configuration (applicable when sessionAffinity is configured other than "None")
@@ -510,7 +511,7 @@ asi:
     
   ingress:
     internal:
-      host: "asi-b2bi-prod.itzroks-664003h6xc-z2t6sc-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud"
+      host: "asi-b2bi-prod.itzroks-664003h6xc-ywje6s-4b4a324f027aea19c5cbc0c3275c4656-0000.us-east.containers.appdomain.cloud"
       tls:
         enabled: true
         secretName: ""
@@ -520,7 +521,7 @@ asi:
       #    servicePort: "my-http"
       #    enableHttps: false
     external:
-      host: "itzroks-664003h6xc-z2t6sc-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud"
+      host: "itzroks-664003h6xc-ywje6s-4b4a324f027aea19c5cbc0c3275c4656-0000.us-east.containers.appdomain.cloud"
       tls:
         enabled: true
         secretName: ""
@@ -738,7 +739,8 @@ ac:
     annotations: {}  
       
   backendService:
-    type: LoadBalancer
+    #type: LoadBalancer
+    type: NodePort
     # Supported values are "ClientIP" & "None". Default is "None".
     sessionAffinity: None
     #override session affinity timeout configuration (applicable when sessionAffinity is configured other than "None")
@@ -785,7 +787,7 @@ ac:
       
   ingress:
     internal:
-      host: "ac-b2bi-prod.itzroks-664003h6xc-z2t6sc-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud"
+      host: "ac-b2bi-prod.itzroks-664003h6xc-ywje6s-4b4a324f027aea19c5cbc0c3275c4656-0000.us-east.containers.appdomain.cloud"
       tls:
         enabled: true
         secretName: ""
@@ -795,7 +797,7 @@ ac:
       #    servicePort: "my-http"
       #    enableHttps: false
     external:
-      host: "itzroks-664003h6xc-z2t6sc-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud"
+      host: "itzroks-664003h6xc-ywje6s-4b4a324f027aea19c5cbc0c3275c4656-0000.us-east.containers.appdomain.cloud"
       tls:
         enabled: true
         secretName: ""
@@ -1031,7 +1033,7 @@ api:
 
   ingress:
     internal:
-      host: "api-b2bi-prod.itzroks-664003h6xc-z2t6sc-6ccd7f378ae819553d37d5f2ee142bd6-0000.us-south.containers.appdomain.cloud"
+      host: "api-b2bi-prod.itzroks-664003h6xc-ywje6s-4b4a324f027aea19c5cbc0c3275c4656-0000.us-east.containers.appdomain.cloud"
       tls:
         enabled: true
         secretName: ""
