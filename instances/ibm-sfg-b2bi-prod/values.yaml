@@ -81,7 +81,7 @@ serviceAccount:
   name: default
 
 resourcesInit:
-  enabled: false
+  enabled: true
   image:
     repository: "cp.icr.io/cp/ibm-b2bi"
     name: "b2bi-resources"
@@ -95,7 +95,7 @@ persistence:
   useDynamicProvisioning: true
 
 appResourcesPVC:
-  enabled: true
+  enabled: false
   storageClassName: ""
   selector:
     label: "intent"
